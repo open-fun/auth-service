@@ -1,0 +1,13 @@
+version: '2.1'
+services:
+  auth:
+    build: .
+    image: auth-service:${VERSION}
+    ports:
+      - "8082:80"
+    network_mode: "bridge"
+
+networks:
+      default:
+          external:
+            name: bridge
