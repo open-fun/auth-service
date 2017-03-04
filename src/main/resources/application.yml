@@ -3,3 +3,11 @@ server:
 
 access_token:
   validity_period: 3600
+
+security:
+  oauth2:
+    client:
+      client-id: sample-user
+      client-secret: sample-password
+      scope: read,write
+      auto-approve-scopes: '.*'

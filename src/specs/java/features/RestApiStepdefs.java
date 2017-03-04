@@ -1,12 +1,16 @@
 package features;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
+import org.springframework.http.HttpStatus;
 
 import java.util.concurrent.TimeoutException;
 
@@ -42,5 +46,36 @@ public class RestApiStepdefs {
 
   private String computePath(String path) {
     return baseUrl + path;
+  }
+
+  @Then("^status code is (.+)$")
+  public void checkStatusCode(String statusCode) throws Throwable {
+    HttpStatus httpStatus = HttpStatus.valueOf(statusCode.toUpperCase().replace(" ", "_"));
+    response.then().statusCode(httpStatus.value());
+  }
+
+  @When("^authorize with (.+) and (.+)$")
+  public void authorizeWith(String username, String password) throws Throwable {
+    requestSpecification = given().auth().digest(username, password);
+  }
+
+  @And("^set parameter (.*) to (.*)$")
+  public void setParameter(String paramName, String paramValue) {
+    requestSpecification = requestSpecification.param(paramName, paramValue);
+  }
+
+  @And("^do post (.*)$")
+  public void doPost(String url) throws Throwable {
+    response = requestSpecification.post(computePath(url));
+  }
+
+  @And("^have parameter (.*)$")
+  public void have(String parameter) throws Throwable {
+    response.then().body(parameter, Matchers.anything());
+  }
+
+  @And("^parameter (.+) equals to (.+)$")
+  public void parameterEqualsTo(String parameter, String value) throws Throwable {
+    response.then().body(parameter, equalTo(value));
   }
 }
