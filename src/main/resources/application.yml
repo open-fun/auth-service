@@ -4,10 +4,16 @@ server:
 access_token:
   validity_period: 3600
 
-security:
-  oauth2:
-    client:
-      client-id: sample-user
-      client-secret: sample-password
-      scope: read,write
-      auto-approve-scopes: '.*'
+resource:
+  id: auth-service
+
+spring:
+  datasource:
+    url: jdbc:postgresql://database/users
+    username: postgresql
+    password: postgresql
+    driver-class-name: org.postgresql.Driver
+    tomcat:
+      max-wait: 10000
+      max-active: 50
+      test-on-borrow: true
