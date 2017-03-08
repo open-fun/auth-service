@@ -5,7 +5,7 @@ import me.treaba.auth.domain.UserAuthorityId;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * Created by stanislav on 07.03.17.
+ * Created by Stanislav on 07.03.17.
  */
 public interface UserAuthorityRepository extends CrudRepository<UserAuthority, UserAuthorityId> {
 }

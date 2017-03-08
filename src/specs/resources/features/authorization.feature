@@ -41,13 +41,12 @@ Feature: All resources must be authorized using JWT
     And do get /oauth/authorize?client_id=normal_app&response_type=code&redirect_uri=http://example.com
     Then status code is OK
 
-  @authorization_code @ignore
+  @authorization_code
   Scenario: Authorization code received as part of url after app gets authorized
     #need to be opened in browser
-    When open in browser /oauth/authorize?client_id=normal_app&response_type=code&redirect_uri=http://google.com
-    And authorize with admin@treaba.me and admin
-    And press "Authorize"
-    Then redirected url must have parameter code
+    When open in browser /oauth/authorize?client_id=normal_app&response_type=code&redirect_uri=http://example.com and authorize with admin@treaba.me and admin
+    And click on "authorize"
+    Then browser url must have parameter code
 
   @authorization_code @ignore
   Scenario: With authorization code can be accessed oauth token

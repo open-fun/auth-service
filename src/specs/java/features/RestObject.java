@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
- * Created by stanislav on 08.03.17.
+ * Created by Stanislav on 08.03.17.
  */
 public class RestObject {
 

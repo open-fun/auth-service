@@ -18,6 +18,16 @@ services:
       - database
     network_mode: "bridge"
 
+  selenium:
+    image: vvoyer/docker-selenium-firefox-chrome
+    privileged: true
+    links:
+      - auth
+    ports:
+      - 4444:4444
+      - 5999:5999 #vnc server running on localhost:5999, password: secret
+    network_mode: "bridge"
+
 networks:
   default:
     external:

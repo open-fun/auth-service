@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.sql.DataSource;
 
 /**
- * Created by stanislav on 06.03.17.
+ * Created by Stanislav on 06.03.17.
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)

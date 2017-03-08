@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 /**
- * Created by stanislav on 07.03.17.
+ * Created by Stanislav on 07.03.17.
  */
 @Configuration
 @EnableAuthorizationServer

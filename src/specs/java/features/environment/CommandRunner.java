@@ -1,4 +1,4 @@
-package features;
+package features.environment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Created by stanislav on 04.03.17.
+ * Created by Stanislav on 04.03.17.
  */
 public class CommandRunner {
 

@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * Created by stanislav on 08.03.17.
+ * Created by Stanislav on 08.03.17.
  */
 @Data
 @Embeddable

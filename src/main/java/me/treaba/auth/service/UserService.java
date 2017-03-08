@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 import java.sql.SQLException;
 
 /**
- * Created by stanislav on 06.03.17.
+ * Created by Stanislav on 06.03.17.
  */
 @Slf4j
 @Service

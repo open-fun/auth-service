@@ -1,11 +1,11 @@
-package features;
+package features.environment;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by stanislav on 04.03.17.
+ * Created by Stanislav on 04.03.17.
  */
 @Slf4j
 public class DockerHelper {

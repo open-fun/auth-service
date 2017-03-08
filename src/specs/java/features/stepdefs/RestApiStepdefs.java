@@ -1,26 +1,23 @@
-package features;
+package features.stepdefs;
 
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import features.RestObject;
 import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.TimeoutException;
-
 /**
- * Created by stanislav on 04.03.17.
+ * Created by Stanislav on 04.03.17.
  */
 @Slf4j
-public class RestApiStepdefs {
-  private String baseUrl;
+public class RestApiStepdefs extends BaseStepdefs {
   private RestObject restObject;
 
   @Before
-  public void setUp() throws TimeoutException {
-    baseUrl = "http://" + DockerHelper.getIpWhenIsHealthy("authservice_auth_") + ":80";
-    log.info("Service URL is: " + baseUrl);
+  public void setUp() throws Exception {
+    super.setUp();
     restObject = new RestObject();
   }
 
@@ -32,10 +29,6 @@ public class RestApiStepdefs {
   @Then("^result must contain (.+) parameter with value (.*)$")
   public void resultMustContainParameter(String parameterName, String value) throws Throwable {
     restObject.assertParameterValue(parameterName, value);
-  }
-
-  private String computePath(String path) {
-    return baseUrl + path;
   }
 
   @Then("^status code is (.+)$")
