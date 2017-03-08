@@ -1,5 +1,6 @@
 package features.stepdefs;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -43,7 +44,7 @@ public class RestApiStepdefs extends BaseStepdefs {
 
   @And("^set parameter (.*) to (.*)$")
   public void setParameter(String paramName, String paramValue) {
-    restObject.param(paramName, paramValue);
+    restObject.param(paramName, tryProcess(paramValue));
   }
 
   @And("^do post (.*)$")
@@ -64,5 +65,10 @@ public class RestApiStepdefs extends BaseStepdefs {
   @When("^not authorized$")
   public void notAuthorized() throws Throwable {
     restObject.resetAuthorization();
+  }
+
+  @When("^authorize without password using (.+)$")
+  public void authorizeWithoutPasswordUsing(String username) throws Throwable {
+    restObject.basicAuth(username, "");
   }
 }

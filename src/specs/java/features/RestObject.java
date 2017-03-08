@@ -28,6 +28,7 @@ public class RestObject {
   public void assertStatusCode(String statusCode) {
     HttpStatus httpStatus = HttpStatus.valueOf(statusCode.toUpperCase().replace(" ", "_"));
     response.then().statusCode(httpStatus.value());
+    response.then().log().all();
   }
 
   public void basicAuth(String username, String password) {

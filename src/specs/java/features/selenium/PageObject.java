@@ -32,4 +32,18 @@ public class PageObject {
     boolean exists = query.contains(parameterName + "=");
     assertTrue("Current query is " + query, exists);
   }
+
+  public String getQueryParameter(String parameterName) throws URISyntaxException {
+    String url = driver.getCurrentUrl();
+    String query = new URI(url).getQuery();
+    String parameterPattern = parameterName + "=";
+    if (query.contains(parameterPattern)) {
+      String substring = query.substring(query.indexOf(parameterPattern) + parameterPattern.length());
+      if (substring.contains("&")) {
+        return substring.substring(0, substring.indexOf("&"));
+      }
+      return substring;
+    }
+    throw new IllegalStateException("Cannot access parameter " + parameterName + " from query " + query);
+  }
 }
