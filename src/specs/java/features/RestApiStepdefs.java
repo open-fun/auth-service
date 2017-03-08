@@ -1,47 +1,37 @@
 package features;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matchers;
-import org.springframework.http.HttpStatus;
 
 import java.util.concurrent.TimeoutException;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
  * Created by stanislav on 04.03.17.
  */
 @Slf4j
 public class RestApiStepdefs {
-
-  private RequestSpecification requestSpecification;
-  private Response response;
   private String baseUrl;
+  private RestObject restObject;
 
   @Before
   public void setUp() throws TimeoutException {
     baseUrl = "http://" + DockerHelper.getIpWhenIsHealthy("authservice_auth_") + ":80";
     log.info("Service URL is: " + baseUrl);
-    requestSpecification = given();
+    restObject = new RestObject();
   }
 
   @When("^do get (.+)$")
   public void doGet(String path) {
-    response = requestSpecification.accept(ContentType.JSON).get(computePath(path));
+    restObject.doGet(ContentType.JSON, computePath(path));
   }
 
   @Then("^result must contain (.+) parameter with value (.*)$")
   public void resultMustContainParameter(String parameterName, String value) throws Throwable {
-    response.then().body(parameterName, equalTo(value));
+    restObject.assertParameterValue(parameterName, value);
   }
 
   private String computePath(String path) {
@@ -50,32 +40,36 @@ public class RestApiStepdefs {
 
   @Then("^status code is (.+)$")
   public void checkStatusCode(String statusCode) throws Throwable {
-    HttpStatus httpStatus = HttpStatus.valueOf(statusCode.toUpperCase().replace(" ", "_"));
-    response.then().statusCode(httpStatus.value());
+    restObject.assertStatusCode(statusCode);
   }
 
-  @When("^authorize with (.+) and (.+)$")
+  @When("^authorize with (.+) and (.*)$")
   public void authorizeWith(String username, String password) throws Throwable {
-    requestSpecification = given().auth().digest(username, password);
+    restObject.basicAuth(username, password);
   }
 
   @And("^set parameter (.*) to (.*)$")
   public void setParameter(String paramName, String paramValue) {
-    requestSpecification = requestSpecification.param(paramName, paramValue);
+    restObject.param(paramName, paramValue);
   }
 
   @And("^do post (.*)$")
   public void doPost(String url) throws Throwable {
-    response = requestSpecification.post(computePath(url));
+    restObject.doPost(computePath(url));
   }
 
   @And("^have parameter (.*)$")
   public void have(String parameter) throws Throwable {
-    response.then().body(parameter, Matchers.anything());
+    restObject.assertExistParameter(parameter);
   }
 
   @And("^parameter (.+) equals to (.+)$")
   public void parameterEqualsTo(String parameter, String value) throws Throwable {
-    response.then().body(parameter, equalTo(value));
+    restObject.assertParameterValue(parameter, value);
+  }
+
+  @When("^not authorized$")
+  public void notAuthorized() throws Throwable {
+    restObject.resetAuthorization();
   }
 }

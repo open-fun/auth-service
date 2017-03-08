@@ -49,6 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/health.json").permitAll()
         .antMatchers(HttpMethod.OPTIONS).permitAll()
         .anyRequest().authenticated()
+        .and().httpBasic()
         .and().csrf().disable();
   }
 

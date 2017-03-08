@@ -43,6 +43,11 @@ public class UserService {
     userAuthority.setEmail(DEFAULT_ADMIN);
     userAuthority.setAuthority("ROLE_ADMIN");
     userAuthorityRepository.save(userAuthority);
+
+    userAuthority = new UserAuthority();
+    userAuthority.setEmail(DEFAULT_ADMIN);
+    userAuthority.setAuthority("ROLE_USER");
+    userAuthorityRepository.save(userAuthority);
   }
 
 }

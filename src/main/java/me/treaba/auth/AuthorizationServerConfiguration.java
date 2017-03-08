@@ -49,7 +49,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     clients.inMemory()
-        .withClient("normal-app")
+        .withClient("normal_app")
         .authorizedGrantTypes("authorization_code", "implicit")
         .authorities("ROLE_CLIENT")
         .scopes("read", "write")
