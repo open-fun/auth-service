@@ -1,19 +1,22 @@
 package features.stepdefs;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import features.RestObject;
 import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 /**
  * Created by Stanislav on 04.03.17.
  */
 @Slf4j
 public class RestApiStepdefs extends BaseStepdefs {
+  private static final String USER_BODY_PATTERN = "{ \"email\": \"user_%s@treaba.me\", \"password\":\"password\" }";
   private RestObject restObject;
 
   @Before
@@ -70,5 +73,26 @@ public class RestApiStepdefs extends BaseStepdefs {
   @When("^authorize without password using (.+)$")
   public void authorizeWithoutPasswordUsing(String username) throws Throwable {
     restObject.basicAuth(username, "");
+  }
+
+  @When("^do (.+) post (.+) with$")
+  public void doPost(String contentType, String path, String body) throws Throwable {
+    restObject.doPost(contentType, body, computePath(path));
+  }
+
+  @Given("^delete all users except (.+)$")
+  public void deleteAllUsersExcept(String userToExcept) throws Throwable {
+    List<String> items = restObject.list(computePath("/users"), "_embedded.userResourceList._links.self.href");
+    if (items != null)
+      items.stream()
+          .filter(item -> !item.endsWith(userToExcept))
+          .forEach(restObject::doDelete);
+  }
+
+  @And("^have (\\d+) more users$")
+  public void haveMoreUsers(int usersCount) throws Throwable {
+    for (int i = 0; i < usersCount; i++) {
+      doPost("JSON", "/users", String.format(USER_BODY_PATTERN, System.currentTimeMillis()));
+    }
   }
 }

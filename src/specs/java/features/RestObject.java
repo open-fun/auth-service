@@ -6,7 +6,10 @@ import io.restassured.specification.RequestSpecification;
 import org.hamcrest.Matchers;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
@@ -22,12 +25,21 @@ public class RestObject {
   }
 
   public void assertParameterValue(String parameterName, String value) {
-    response.then().body(parameterName, equalTo(value));
+    try {
+      response.then().body(parameterName, anyOf(equalTo(value), equalTo(Integer.parseInt(value))));
+    } catch (NumberFormatException ex) {
+      response.then().body(parameterName, anyOf(equalTo(value)));
+    }
   }
 
   public void assertStatusCode(String statusCode) {
     HttpStatus httpStatus = HttpStatus.valueOf(statusCode.toUpperCase().replace(" ", "_"));
-    response.then().statusCode(httpStatus.value());
+    int code = httpStatus.value();
+    assertStatusCode(code);
+  }
+
+  public void assertStatusCode(int code) {
+    response.then().statusCode(code);
     response.then().log().all();
   }
 
@@ -49,5 +61,22 @@ public class RestObject {
 
   public void resetAuthorization() {
     requestSpecification = given();
+  }
+
+  public void doPost(String contentType, String body, String path) {
+    response = requestSpecification
+        .contentType(ContentType.valueOf(contentType.toUpperCase()))
+        .body(body)
+        .post(path);
+  }
+
+  public <T> List<T> list(String url, String jsonPath) {
+    Response response = requestSpecification.get(url);
+    response.then().log().body();
+    return response.jsonPath().getList(jsonPath);
+  }
+
+  public void doDelete(String path) {
+    response = requestSpecification.delete(path);
   }
 }

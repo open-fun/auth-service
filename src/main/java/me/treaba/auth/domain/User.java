@@ -1,11 +1,9 @@
 package me.treaba.auth.domain;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by Stanislav on 06.03.17.
@@ -15,14 +13,18 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class User {
 
-  private String display_name;
+  private String displayName;
 
   @Id
-  @NotBlank
   private String email;
 
-  @NotBlank
   private String password;
 
+  @ElementCollection(fetch = FetchType.EAGER)
+  private Set<String> authorities;
+
   private boolean enabled;
+  private boolean accountExpired;
+  private boolean credentialsExpired;
+  private boolean accountLocked;
 }

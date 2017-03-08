@@ -1,5 +1,7 @@
 package me.treaba.auth;
 
+import me.treaba.auth.domain.User;
+import me.treaba.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -12,10 +14,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.sql.DataSource;
+import static org.springframework.security.core.userdetails.User.withUsername;
 
 /**
  * Created by Stanislav on 06.03.17.
@@ -27,7 +30,7 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Autowired
-  private DataSource dataSource;
+  private UserService userService;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -36,11 +39,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.jdbcAuthentication()
-        .passwordEncoder(passwordEncoder())
-        .dataSource(this.dataSource)
-        .usersByUsernameQuery("select email as username, password, enabled from users where email=?")
-        .authoritiesByUsernameQuery("select email as username, authority from authorities where email=?");
+    auth.userDetailsService(this::findUserDetails)
+        .passwordEncoder(passwordEncoder());
+  }
+
+  private UserDetails findUserDetails(String username) {
+    User user = userService.findOne(username);
+    return withUsername(user.getEmail())
+        .password(user.getPassword())
+        .disabled(!user.isEnabled())
+        .accountExpired(user.isAccountExpired())
+        .accountLocked(user.isAccountLocked())
+        .credentialsExpired(user.isCredentialsExpired())
+        .authorities(user.getAuthorities().toArray(new String[user.getAuthorities().size()]))
+        .build();
   }
 
   @Override
