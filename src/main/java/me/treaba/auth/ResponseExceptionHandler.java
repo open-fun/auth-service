@@ -2,11 +2,13 @@ package me.treaba.auth;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 
 /**
@@ -16,8 +18,9 @@ import java.io.IOException;
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
 
-  @ExceptionHandler({DataIntegrityViolationException.class})
-  void handleBadRequests(HttpServletResponse response) throws IOException {
+  @ExceptionHandler({DataIntegrityViolationException.class, TransactionSystemException.class, ConstraintViolationException.class})
+  void handleBadRequests(Exception ex, HttpServletResponse response) throws IOException {
+    logger.warn(ex.getLocalizedMessage(), ex);
     response.sendError(HttpStatus.UNPROCESSABLE_ENTITY.value());
   }
 }

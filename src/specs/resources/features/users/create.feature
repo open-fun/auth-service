@@ -2,7 +2,7 @@ Feature: Create user considering HATEOAS
 
   Background: Clean up all data
     Given authorize with admin@treaba.me and admin
-    And delete all users except admin@treaba.me
+    And delete all users except admin%2540treaba%252Eme
 
   Scenario: Unable to create user if not get authenticated
     Given not authorized
@@ -47,7 +47,7 @@ Feature: Create user considering HATEOAS
       "email": "hypermedia@example.com"
     }
     """
-    Then status code is Unprocessable Entity
+    Then status code is Bad request
 
   Scenario: Create user with custom display name
     Given authorize with admin@treaba.me and admin

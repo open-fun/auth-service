@@ -79,4 +79,11 @@ public class RestObject {
   public void doDelete(String path) {
     response = requestSpecification.delete(path);
   }
+
+  public void doPut(String contentType, String body, String url) {
+    response = requestSpecification
+        .contentType(ContentType.valueOf(contentType.toUpperCase()))
+        .body(body)
+        .put(url);
+  }
 }

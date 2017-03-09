@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Created by Stanislav on 06.03.17.
@@ -48,15 +49,42 @@ public class UserService {
   }
 
   public User save(User user) {
-    if (!userRepository.exists(user.getEmail())) {
-      user.setAuthorities(new HashSet<String>() {{
-        add(ROLE_USER);
-      }});
+    encodePassword(user);
+    if (isNew(user)) {
+      setDefaultValues(user);
+    } else {
+      syncOldFieldsOnEmpty(user);
     }
+    return userRepository.save(user);
+  }
+
+  private void encodePassword(User user) {
+    if (isNotBlank(user.getPassword()))
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+  }
+
+  private void setDefaultValues(User user) {
     if (isBlank(user.getDisplayName())) {
       user.setDisplayName(user.getEmail());
     }
-    return userRepository.save(user);
+    if (user.getAuthorities() == null || user.getAuthorities().isEmpty())
+      user.setAuthorities(new HashSet<String>() {{
+        add(ROLE_USER);
+      }});
+  }
+
+  private boolean isNew(User user) {
+    return !userRepository.exists(user.getEmail());
+  }
+
+  private void syncOldFieldsOnEmpty(User user) {
+    User currentUser = userRepository.findOne(user.getEmail());
+    if (isBlank(user.getDisplayName()))
+      user.setDisplayName(currentUser.getDisplayName());
+    if (isBlank(user.getPassword()))
+      user.setPassword(currentUser.getPassword());
+    if (user.getAuthorities() == null || user.getAuthorities().isEmpty())
+      user.setAuthorities(currentUser.getAuthorities());
   }
 
   public Page<User> findAll(Pageable pageable) {
