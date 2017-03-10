@@ -11,6 +11,7 @@ import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Stanislav on 04.03.17.
@@ -18,6 +19,14 @@ import java.util.List;
 @Slf4j
 public class RestApiStepdefs extends BaseStepdefs {
   private static final String USER_BODY_PATTERN = "{ \"email\": \"user_%s@treaba.me\", \"password\":\"password\" }";
+  private static final String CLIENT_APPLICATION_BODY_PATTERN = " {\n" +
+      "      \"clientId\": \"an_app_%s\",\n" +
+      "      \"resourceIds\": [\"spring-boot-application\"],\n" +
+      "      \"authorizedGrantTypes\": [\"authorization_code\", \"implicit\"],\n" +
+      "      \"authorityList\": [\"ROLE_CLIENT\"],\n" +
+      "      \"scopes\": [\"read\", \"write\"],\n" +
+      "      \"redirectUris\": [\"http://example.com\"]\n" +
+      "    }";
   private RestObject restObject;
 
   @Before
@@ -107,5 +116,17 @@ public class RestApiStepdefs extends BaseStepdefs {
     List<String> items = restObject.list(computePath("/" + resource), "_embedded." + resource + "._links.self.href");
     if (items != null)
       items.forEach(restObject::doDelete);
+  }
+
+  @And("^have (\\d+) more client applications$")
+  public void haveMoreClientApplications(int countApplications) throws Throwable {
+    for (int i = 0; i < countApplications; i++) {
+      doPost("JSON", "/clientApplications", String.format(CLIENT_APPLICATION_BODY_PATTERN, System.currentTimeMillis()));
+    }
+  }
+
+  @When("^do (.+) patch (.+) with$")
+  public void doPatch(String contentType, String path, String body) throws Throwable {
+    restObject.doPatch(contentType, body, computePath(path));
   }
 }

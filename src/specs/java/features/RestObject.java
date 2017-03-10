@@ -86,4 +86,11 @@ public class RestObject {
         .body(body)
         .put(url);
   }
+
+  public void doPatch(String contentType, String body, String url) {
+    response = requestSpecification
+        .contentType(ContentType.valueOf(contentType.toUpperCase()))
+        .body(body)
+        .patch(url);
+  }
 }
