@@ -27,6 +27,16 @@ That also will allow to combine it with different technology stacks/langs into y
 ## Docs for API
 Check `.feature` files under `./src/specs/resources/features/` I try to have them as most complete as possible (or reasonable).
 
+## Running
+Dependencises:
+* JDK8
+* Docker
+* Docker-compose
+run from root of the project: `./mvnw clean install`
+Note: First time it has to run a long time as docker images are downloaded. After that it takes about one-two minutes to do fll build with tests and docker generation.
+To run service do `docker-compse up` form project folder.
+The service is accesible at localhost:8082 (check docker-compose.yml configs).
+
 ## License type
 Whatever license type you need just ask to be updated.
 Just one thing to keep in mind that the license type has to be open for other people too.
