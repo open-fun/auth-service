@@ -32,6 +32,7 @@ Dependencises:
 * JDK8
 * Docker
 * Docker-compose
+
 run from root of the project: `./mvnw clean install`
 Note: First time it has to run a long time as docker images are downloaded. After that it takes about one-two minutes to do fll build with tests and docker generation.
 To run service do `docker-compse up` form project folder.
