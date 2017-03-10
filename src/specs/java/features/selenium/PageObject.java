@@ -1,5 +1,6 @@
 package features.selenium;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -29,6 +30,8 @@ public class PageObject {
   public void assertExistsQueryParameter(String parameterName) throws URISyntaxException {
     String url = driver.getCurrentUrl();
     String query = new URI(url).getQuery();
+    if (query == null)
+      query = StringUtils.substringAfter(url, "#");
     boolean exists = query.contains(parameterName + "=");
     assertTrue("Current query is " + query, exists);
   }

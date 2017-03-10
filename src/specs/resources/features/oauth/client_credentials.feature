@@ -1,4 +1,4 @@
-@client_credentials
+@grant_client_credentials
 Feature: Ability to authorize by client credentials
 
 
@@ -11,8 +11,8 @@ Feature: Ability to authorize by client credentials
     When do get /oauth/token
     Then status code is Unauthorized
 
-  Scenario: Authorize by credentials with secret
-    Given  do JSON post /clientApplications with
+  Scenario: Authorize by client credentials with secret
+    Given do JSON post /clientApplications with
     """
     {
       "clientId": "an_app",
@@ -35,13 +35,13 @@ Feature: Ability to authorize by client credentials
     And have parameter expires_in
     And parameter token_type equals to bearer
 
-  Scenario: Authorize by credentials without any secret
-    Given  do JSON post /clientApplications with
+  Scenario: Authorize by client credentials without any secret
+    Given do JSON post /clientApplications with
     """
     {
       "clientId": "another_app",
       "resourceIds": ["spring-boot-application"],
-      "authorizedGrantTypes": ["client_credentials", "password"],
+      "authorizedGrantTypes": ["client_credentials"],
       "authorityList": ["ROLE_TRUSTED_CLIENT"],
       "scopes": ["read", "write"],
       "redirectUris": ["http://example.com"]
