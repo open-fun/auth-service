@@ -3,6 +3,7 @@ package me.treaba.auth;
 import me.treaba.auth.service.ClientApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +12,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 /**
  * Created by Stanislav on 07.03.17.
@@ -26,6 +30,18 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   @Value("${access_token.validity_period:3600}")
   private int accessTokenValiditySeconds = 3600;
 
+  @Value("${key.store.resource:classpath:sample.jks}")
+  private String keyStoreResource;
+
+  @Value("${key.store.password:secret}")
+  private String keyStorePassword;
+
+  @Value("${key.store.key_pair:testkey}")
+  private String keyStoreKeyPair;
+
+  @Autowired
+  private ApplicationContext applicationContext;
+
   @Autowired
   private AuthenticationManager authenticationManager;
 
@@ -33,15 +49,29 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   private ClientApplicationService clientApplicationService;
 
   @Bean
+  public TokenStore tokenStore(@Autowired JwtAccessTokenConverter accessTokenConverter) {
+    return new JwtTokenStore(accessTokenConverter);
+  }
+
+  @Bean
+  public KeyStoreKeyFactory keyStoreKeyFactory() {
+    return new KeyStoreKeyFactory(applicationContext.getResource(keyStoreResource), keyStorePassword.toCharArray());
+  }
+
+  @Bean
   public JwtAccessTokenConverter accessTokenConverter() {
-    return new JwtAccessTokenConverter();
+    JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
+    KeyStoreKeyFactory keyStoreKeyFactory = applicationContext.getBean(KeyStoreKeyFactory.class);
+    accessTokenConverter.setKeyPair(keyStoreKeyFactory.getKeyPair(keyStoreKeyPair));
+    return accessTokenConverter;
   }
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
     endpoints
-        .authenticationManager(this.authenticationManager)
-        .accessTokenConverter(accessTokenConverter());
+        .tokenStore(applicationContext.getBean(TokenStore.class))
+        .tokenEnhancer(applicationContext.getBean(JwtAccessTokenConverter.class))
+        .authenticationManager(this.authenticationManager);
   }
 
   @Override
