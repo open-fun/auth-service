@@ -1,3 +1,4 @@
+@ignore
 Feature: All resources must be authorized using JWT
 
 

@@ -1,5 +1,6 @@
 package me.treaba.auth;
 
+import me.treaba.auth.service.ClientApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,10 +24,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   private String resourceId;
 
   @Value("${access_token.validity_period:3600}")
-  int accessTokenValiditySeconds = 3600;
+  private int accessTokenValiditySeconds = 3600;
 
   @Autowired
   private AuthenticationManager authenticationManager;
+
+  @Autowired
+  private ClientApplicationService clientApplicationService;
 
   @Bean
   public JwtAccessTokenConverter accessTokenConverter() {
@@ -48,21 +52,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    clients.inMemory()
-        .withClient("normal_app")
-        .authorizedGrantTypes("authorization_code", "implicit")
-        .authorities("ROLE_CLIENT")
-        .scopes("read", "write")
-        .resourceIds(resourceId)
-        .accessTokenValiditySeconds(accessTokenValiditySeconds)
-        .and()
-        .withClient("trusted-app")
-        .authorizedGrantTypes("client_credentials", "password")
-        .authorities("ROLE_TRUSTED_CLIENT")
-        .scopes("read", "write")
-        .resourceIds(resourceId)
-        .accessTokenValiditySeconds(accessTokenValiditySeconds)
-        .secret("secret");
+    clients.withClientDetails(clientApplicationService);
   }
 
 

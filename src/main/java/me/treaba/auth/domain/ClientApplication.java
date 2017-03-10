@@ -30,7 +30,7 @@ public class ClientApplication implements ClientDetails {
   private String clientId;
 
   @NotNull(message = "error.resources_ids.required")
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> resourceIds;
 
   @JsonIgnore
@@ -39,24 +39,24 @@ public class ClientApplication implements ClientDetails {
   private Boolean secretRequired = false;
 
   @NotNull(message = "error.scopes.required")
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> scopes;
 
   private Boolean scoped = true;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> autoApproveScopes;
 
   @NotNull(message = "error.grant_types.required")
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> authorizedGrantTypes;
 
   @NotNull(message = "error.redirect_uris.required")
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> redirectUris;
 
   @NotNull(message = "error.authorities.required")
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> authorityList;
 
   private Integer accessTokenValiditySeconds = 3600;
