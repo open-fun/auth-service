@@ -17,6 +17,7 @@ During learning of spring-boot I had to deal with next issues:
 * Most of the examples are using some particular feature (and when you have to combine different features you can deal with config issues)
 * I don't saw real world usage of spring security without database storage (while most of examples uses inMemory access)
 * The same code and configuration has to be done between different projects and companies.
+* Most of the OAuth examples are implemented just partially/or with in memory/hardcode storage.
 
 ## Output of service oriented project
 Definitely Docker. As today industry standard (considering implementation for most of the Cloud providers).
