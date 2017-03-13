@@ -9,7 +9,7 @@ Actually I don't claim that this one is. I just want to have a relatively stable
 An open API will allow to use this one into existing system as well to be used into new ones.
 The service oriented approach allow to start up fast a new project, and just switch or improve it latter one (and to not care about implementation).
 
-If you are not sure if this one fits your project, you can just start using it and then switch to do your own implementation just in case if it will be needed.
+If you are not sure if this one fits your project, you can just start using it and then switch to your own implementation just in case if it will be needed.
 However I see more value to be improved this project rather than copy it and improve on your end, because in the future it will have to boost your delivery.
 
 ## Issues with framework providing model
@@ -20,7 +20,7 @@ During learning of spring-boot I had to deal with next issues:
 * Most of the OAuth examples are implemented just partially/or with in memory/hardcode storage.
 
 ## Output of service oriented project
-Definitely Docker. As today industry standard (considering implementation for most of the Cloud providers).
+Definitely Docker image. As today industry standard (considering implementation for most of the Cloud providers).
 That also will allow to combine it with different technology stacks/langs into your company.
 
 
