@@ -7,4 +7,5 @@ service:
 	- docker
 	- docker-compose
 
-script: mvn clean verify
+script: 
+	- ./mvnw clean verify
