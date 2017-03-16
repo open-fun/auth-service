@@ -4,8 +4,8 @@ jdk:
 sudo: false
 
 services:
-	- docker
-	- docker-compose
+  - docker
+  - docker-compose
 
 script: 
-	- ./mvnw clean verify
+  - ./mvnw clean verify
