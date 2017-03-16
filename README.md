@@ -2,6 +2,8 @@
 API for User management and security (using OAuth2 & JWT).
 The main idea is to provide open source services/"microservices" instead of libraries.
 
+[![Build Status](https://travis-ci.org/open-fun/auth-service.svg?branch=master)](https://travis-ci.org/open-fun/auth-service)
+
 ## A bit of history (why this raised?)
 I saw a lot of "bicycles" implemented for many of clients and companies.
 And often their implementation is far away from the best one.
