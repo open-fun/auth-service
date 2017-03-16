@@ -8,4 +8,4 @@ services:
   - docker-compose
 
 script: 
-  - ./mvnw clean verify
+  - ./mvnw clean deploy

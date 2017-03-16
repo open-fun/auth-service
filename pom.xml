@@ -220,6 +220,14 @@
       </plugin>
 
       <plugin>
+        <!-- skipping deploy of jar file -->
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.5.0</version>
@@ -273,6 +281,23 @@
               </arguments>
             </configuration>
           </execution>
+
+          <execution>
+            <id>publish containers</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>docker-compose</executable>
+              <arguments>
+                <argument>--project-name</argument>
+                <argument>${project.name}</argument>
+                <argument>push</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
         </executions>
       </plugin>
     </plugins>
