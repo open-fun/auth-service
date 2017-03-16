@@ -29,7 +29,7 @@ That also will allow to combine it with different technology stacks/langs into y
 ## Docs for API
 Check `.feature` files under `./src/specs/resources/features/` I try to have them as most complete as possible (or reasonable).
 
-## Running
+## Building
 Dependencises:
 * JDK8
 * Docker
@@ -39,6 +39,13 @@ run from root of the project: `./mvnw clean install`
 Note: First time it has to run a long time as docker images are downloaded. After that it takes about one-two minutes to do full build with tests and docker generation.
 To run service do `docker-compse up` form project folder.
 The service is accesible at localhost:8082 (check docker-compose.yml configs).
+
+## To use latest docker image
+`docker pull openfun/auth-service`
+service is served at port `80`
+
+To use it link a database. Check as example how is done in docker-compose.yml
+Other details see there: https://hub.docker.com/r/openfun/auth-service/
 
 ## License type
 Whatever license type you need just ask to be updated.
