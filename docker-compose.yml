@@ -12,13 +12,16 @@ services:
   auth:
     build: .
     image: openfun/auth-service:${VERSION}
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 #for development only, do not use in production
     ports:
       - "8082:80"
+      - "5005:5005" #for development only, do not use in production
     links:
       - database
     network_mode: "bridge"
 
-  selenium:
+  selenium: #for development only, dont need it for production
     image: vvoyer/docker-selenium-firefox-chrome
     privileged: true
     links:

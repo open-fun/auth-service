@@ -40,6 +40,14 @@ Note: First time it has to run a long time as docker images are downloaded. Afte
 To run service do `docker-compse up` form project folder.
 The service is accesible at localhost:8082 (check docker-compose.yml configs).
 
+# Run debug into docker container
+
+From IntelliJIDEA you have to create a run config by using next command:
+` Run -> Edit Configurations -> + (Press on 'plus' sign [green one]) -> Remote -> <type any name> and press apply or OK`
+In current version default params are `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005` so if you need other you have to update docker-compose.yml & settings in your IDE.
+
+Next step is to put some brake points then run the container (or do `mvn clean install`), then run debug task that you configured (see a drop down in upper right corner, you have choose task with the name that you provided).
+
 ## To use latest docker image
 `docker pull openfun/auth-service`
 service is served at port `80`
