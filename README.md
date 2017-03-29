@@ -48,7 +48,7 @@ In current version default params are `-agentlib:jdwp=transport=dt_socket,server
 
 Next step is to put some brake points then run the container (or do `mvn clean install`), then run debug task that you configured (see a drop down in upper right corner, you have choose task with the name that you provided).
 
-Otherwise see the gif bellow: ![anim](https://cloud.githubusercontent.com/assets/3275697/24468860/47543876-14c2-11e7-91c9-bec00c4efeee.gif)
+Otherwise see the gif bellow (click on it): ![anim](https://cloud.githubusercontent.com/assets/3275697/24468860/47543876-14c2-11e7-91c9-bec00c4efeee.gif)
 
 ## To use latest docker image
 `docker pull openfun/auth-service`
