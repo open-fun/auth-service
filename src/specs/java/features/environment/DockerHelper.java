@@ -60,4 +60,8 @@ public class DockerHelper {
     waitUntilIsHealthy(containerName);
     return inspectIp(containerName);
   }
+
+  public static String getIp(String partialName) {
+    return inspectIp(findNameByPartOfText(partialName));
+  }
 }

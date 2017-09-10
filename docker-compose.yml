@@ -1,4 +1,4 @@
-version: '2'
+version: '3.3'
 services:
 
   database:
@@ -20,8 +20,13 @@ services:
     links:
       - database
     network_mode: "bridge"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  selenium: #for development only, dont need it for production
+  selenium: #for development only, don't need it for production
     image: vvoyer/docker-selenium-firefox-chrome
     privileged: true
     links:
@@ -30,6 +35,11 @@ services:
       - 4444:4444
       - 5999:5999 #vnc server running on localhost:5999, password: secret
     network_mode: "bridge"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   default:
