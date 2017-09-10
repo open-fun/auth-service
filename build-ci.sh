@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
-dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-project_name=$(basename ${dir})
-docker run -it --rm --name ${project_name} \
-    -u $(id -u):$(id -g) \
-    -v "$dir":/usr/src/${project_name} \
-    -w /usr/src/${project_name} \
-    maven:3-jdk-9 \
-    mvn clean install
+export PROJECT_DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+export PROJECT_NAME=$(basename ${PROJECT_DIR})
+
+docker-compose -f ${PROJECT_DIR}/docker/build/docker-compose.build.yml up --build --force-recreate

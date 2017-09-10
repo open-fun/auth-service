@@ -1,0 +1,18 @@
+version: '3.2'
+services:
+
+  service_build:
+    build: .
+    volumes:
+      - ${PROJECT_DIR}:/usr/src/${PROJECT_NAME}
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /usr/src/${PROJECT_NAME}
+    network_mode: "bridge"
+    userns_mode: "host"
+    pid: "host"
+    command: mvn clean install
+
+networks:
+  default:
+    external:
+      name: bridge

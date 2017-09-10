@@ -33,7 +33,7 @@ public class RunCukes {
     }
 
     if (isBlank(System.getProperty("serviceURL"))) {
-      String serviceUrl = "http://" + DockerHelper.getIpWhenIsHealthy("authservice_auth_") + ":80";
+      String serviceUrl = "http://" + DockerHelper.getIp("authservice_auth_") + ":80";
       log.info("Defined Auth Service URL: {}", serviceUrl);
       System.setProperty("serviceURL", serviceUrl);
     }
